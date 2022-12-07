@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         body: Stack(children: [_backWidget(), _frontWidget()]));
   }
 
+  //back Image Widget
   Widget _backWidget() {
     return Image(
         image: const AssetImage('assets/background.png'),
@@ -64,6 +65,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         width: MediaQuery.of(context).size.width);
   }
 
+  //main Widget Build
   Widget _frontWidget() {
     return ValueListenableBuilder<double>(
         valueListenable: _notifier,
@@ -91,10 +93,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget _bookWidget(context, int index, double value) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    //here we get the value scrolled from page to determine rotation
     double diff = index - value;
+    //here we clamp value to prevent reverse rotation
     double clampVal = diff.clamp(0.0, 1.0);
+    //here we used fraction power to scale the values of difference to be greater
     double rotation = 1.3 * pow(clampVal, 0.25);
-
     return Align(
         alignment: Alignment.center,
         child: InkWell(
@@ -117,6 +121,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 })));
   }
 
+  //title and author Widgets wrapped with Hero Widget for Transition Animation
   Widget _bookDetailWidget(int index) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,6 +143,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ]);
   }
 
+  //Bottom Widgets
   Widget _bottomChipsWidget() {
     return Row(children: [
       Container(
@@ -175,15 +181,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   _opedDetailsPage(int index) {
+    //start image scale animation
     _animationController.forward();
+
+    //navigate to next page with fade animation
     Navigator.of(context)
         .push(PageRouteBuilder(
             transitionDuration: const Duration(seconds: 1),
             reverseTransitionDuration: const Duration(seconds: 1),
             pageBuilder: (context, animation, secondaryAnimation) {
               return FadeTransition(
-                  opacity: animation, child: DetailsScreen(book: books[index],));
+                  opacity: animation,
+                  child: DetailsScreen(
+                    book: books[index],
+                  ));
             }))
-        .then((value) => _animationController.reset());
+        .then((value) => _animationController.reset()); //here we reset image scale again
+
   }
 }
