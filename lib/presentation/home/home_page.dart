@@ -95,10 +95,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final h = MediaQuery.of(context).size.height;
     //here we get the value scrolled from page to determine rotation
     double diff = index - value;
-    //here we clamp value to prevent reverse rotation
-    double clampVal = diff.clamp(0.0, 1.0);
-    //here we used fraction power to scale the values of difference to be greater
-    double rotation = 1.3 * pow(clampVal, 0.25);
+    //here we used fraction power to scale the difference to be greater
+    double rotation =1.3 * pow(diff, 0.25);
     return Align(
         alignment: Alignment.center,
         child: InkWell(
